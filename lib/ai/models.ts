@@ -1,11 +1,11 @@
-export const DEFAULT_CHAT_MODEL = "moonshotai/kimi-k2.5";
+export const DEFAULT_CHAT_MODEL = "ddgw/gpt-5.4-mini";
 
 export const titleModel = {
   description: "Fast model for title generation",
-  gatewayOrder: ["fireworks", "bedrock"],
-  id: "moonshotai/kimi-k2.5",
-  name: "Kimi K2.5",
-  provider: "moonshotai",
+  gatewayOrder: ["ddgw"],
+  id: "ddgw/gpt-5.4-mini",
+  name: "GPT-5.4 Mini",
+  provider: "ddgw",
 };
 
 export type ModelCapabilities = {
@@ -21,45 +21,52 @@ export type ChatModel = {
   description: string;
   gatewayOrder?: string[];
   reasoningEffort?: "none" | "minimal" | "low" | "medium" | "high";
+  capabilities?: Partial<ModelCapabilities>;
 };
 
 export const chatModels: ChatModel[] = [
   {
-    description: "Fast and capable model with tool use",
-    gatewayOrder: ["bedrock", "deepinfra"],
-    id: "deepseek/deepseek-v3.2",
-    name: "DeepSeek V3.2",
-    provider: "deepseek",
+    capabilities: { reasoning: false, tools: true, vision: true },
+    description: "Fast, highly capable model with tool use",
+    id: "ddgw/gpt-5.4-mini",
+    name: "GPT-5.4 Mini",
+    provider: "ddgw",
   },
   {
-    description: "Moonshot AI flagship model",
-    gatewayOrder: ["fireworks", "bedrock"],
-    id: "moonshotai/kimi-k2.5",
-    name: "Kimi K2.5",
-    provider: "moonshotai",
+    capabilities: { reasoning: true, tools: true, vision: true },
+    description: "Advanced reasoning model with thinking capabilities",
+    id: "ddgw/gpt-5.6-luna",
+    name: "GPT-5.6 Luna",
+    provider: "ddgw",
+    reasoningEffort: "medium",
   },
   {
-    description: "Compact reasoning model",
-    gatewayOrder: ["groq", "bedrock"],
-    id: "openai/gpt-oss-20b",
-    name: "GPT OSS 20B",
-    provider: "openai",
-    reasoningEffort: "low",
+    capabilities: { reasoning: false, tools: true, vision: true },
+    description: "Fast and smart Anthropic model",
+    id: "ddgw/claude-haiku-4-5",
+    name: "Claude Haiku 4.5",
+    provider: "ddgw",
   },
   {
-    description: "Open-source 120B parameter model",
-    gatewayOrder: ["fireworks", "bedrock"],
-    id: "openai/gpt-oss-120b",
+    capabilities: { reasoning: false, tools: true, vision: false },
+    description: "Efficient and fast multilingual model",
+    id: "ddgw/mistral-small-2603",
+    name: "Mistral Small 2603",
+    provider: "ddgw",
+  },
+  {
+    capabilities: { reasoning: true, tools: true, vision: false },
+    description: "Large 120B open weights model",
+    id: "ddgw/tinfoil/gpt-oss-120b",
     name: "GPT OSS 120B",
-    provider: "openai",
-    reasoningEffort: "low",
+    provider: "ddgw",
   },
   {
-    description: "Fast non-reasoning model with tool use",
-    gatewayOrder: ["xai"],
-    id: "xai/grok-4.1-fast-non-reasoning",
-    name: "Grok 4.1 Fast",
-    provider: "xai",
+    capabilities: { reasoning: false, tools: true, vision: false },
+    description: "Google Gemma 4 31B model",
+    id: "ddgw/tinfoil/gemma4-31b",
+    name: "Gemma 4 31B",
+    provider: "ddgw",
   },
 ];
 
@@ -74,7 +81,14 @@ export async function getCapabilities(): Promise<
           { next: { revalidate: 86_400 } }
         );
         if (!res.ok) {
-          return [model.id, { reasoning: false, tools: false, vision: false }];
+          return [
+            model.id,
+            {
+              reasoning: model.capabilities?.reasoning ?? false,
+              tools: model.capabilities?.tools ?? true,
+              vision: model.capabilities?.vision ?? false,
+            },
+          ];
         }
 
         const json = await res.json();
@@ -92,13 +106,20 @@ export async function getCapabilities(): Promise<
         return [
           model.id,
           {
-            reasoning: params.has("reasoning"),
-            tools: params.has("tools"),
-            vision: inputModalities.has("image"),
+            reasoning: model.capabilities?.reasoning ?? params.has("reasoning"),
+            tools: model.capabilities?.tools ?? params.has("tools"),
+            vision: model.capabilities?.vision ?? inputModalities.has("image"),
           },
         ];
       } catch {
-        return [model.id, { reasoning: false, tools: false, vision: false }];
+        return [
+          model.id,
+          {
+            reasoning: model.capabilities?.reasoning ?? false,
+            tools: model.capabilities?.tools ?? true,
+            vision: model.capabilities?.vision ?? false,
+          },
+        ];
       }
     })
   );

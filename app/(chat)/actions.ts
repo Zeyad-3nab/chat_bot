@@ -25,18 +25,24 @@ export async function generateTitleFromUserMessage({
 }: {
   message: UIMessage;
 }) {
-  const { text } = await generateText({
-    instructions: titlePrompt,
-    model: getTitleModel(),
-    prompt: getTextFromMessage(message),
-    providerOptions: {
-      gateway: { order: titleModel.gatewayOrder },
-    },
-  });
-  return text
-    .replace(/^[#*"\s]+/, "")
-    .replace(/["]+$/, "")
-    .trim();
+  try {
+    const { text } = await generateText({
+      instructions: titlePrompt,
+      model: getTitleModel(),
+      prompt: getTextFromMessage(message),
+      providerOptions: {
+        gateway: { order: titleModel.gatewayOrder },
+      },
+    });
+    return text
+      .replace(/^[#*"\s]+/, "")
+      .replace(/["]+$/, "")
+      .trim();
+  } catch (error) {
+    console.error("Failed to generate title:", error);
+    const content = getTextFromMessage(message);
+    return content ? content.slice(0, 50) : "New chat";
+  }
 }
 
 export async function deleteTrailingMessages({ id }: { id: string }) {
