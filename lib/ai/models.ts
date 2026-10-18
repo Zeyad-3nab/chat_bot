@@ -25,6 +25,102 @@ export type ChatModel = {
 };
 
 export const chatModels: ChatModel[] = [
+  // --- Claude Code / Anthropic Models ---
+  {
+    capabilities: { reasoning: true, tools: true, vision: true },
+    description:
+      "Flagship hybrid reasoning and coding model with extended thinking",
+    id: "claude-3-7-sonnet",
+    name: "Claude 3.7 Sonnet",
+    provider: "anthropic",
+    reasoningEffort: "medium",
+  },
+  {
+    capabilities: { reasoning: true, tools: true, vision: true },
+    description: "Claude 3.7 Sonnet (Official dated snapshot 20250219)",
+    id: "claude-3-7-sonnet-20250219",
+    name: "Claude 3.7 Sonnet (20250219)",
+    provider: "anthropic",
+    reasoningEffort: "medium",
+  },
+  {
+    capabilities: { reasoning: false, tools: true, vision: true },
+    description:
+      "State-of-the-art model for coding, reasoning, and complex tasks",
+    id: "claude-3-5-sonnet",
+    name: "Claude 3.5 Sonnet",
+    provider: "anthropic",
+  },
+  {
+    capabilities: { reasoning: false, tools: true, vision: true },
+    description: "Claude 3.5 Sonnet (Official dated snapshot 20241022)",
+    id: "claude-3-5-sonnet-20241022",
+    name: "Claude 3.5 Sonnet (20241022)",
+    provider: "anthropic",
+  },
+  {
+    capabilities: { reasoning: false, tools: true, vision: true },
+    description: "Ultra-fast, high-intelligence model for rapid coding & chat",
+    id: "claude-3-5-haiku",
+    name: "Claude 3.5 Haiku",
+    provider: "anthropic",
+  },
+  {
+    capabilities: { reasoning: false, tools: true, vision: true },
+    description: "Claude 3.5 Haiku (Official dated snapshot 20241022)",
+    id: "claude-3-5-haiku-20241022",
+    name: "Claude 3.5 Haiku (20241022)",
+    provider: "anthropic",
+  },
+  {
+    capabilities: { reasoning: true, tools: true, vision: true },
+    description: "Deep reasoning and high-complexity analysis",
+    id: "claude-3-opus",
+    name: "Claude 3 Opus",
+    provider: "anthropic",
+  },
+  {
+    capabilities: { reasoning: true, tools: true, vision: true },
+    description: "Claude 3 Opus (Official dated snapshot 20240229)",
+    id: "claude-3-opus-20240229",
+    name: "Claude 3 Opus (20240229)",
+    provider: "anthropic",
+  },
+  {
+    capabilities: { reasoning: false, tools: true, vision: true },
+    description: "Balanced intelligence and speed model",
+    id: "claude-3-sonnet",
+    name: "Claude 3 Sonnet",
+    provider: "anthropic",
+  },
+  {
+    capabilities: { reasoning: false, tools: true, vision: true },
+    description: "Lightweight, ultra-fast model for simple tasks",
+    id: "claude-3-haiku",
+    name: "Claude 3 Haiku",
+    provider: "anthropic",
+  },
+  {
+    capabilities: { reasoning: false, tools: true, vision: true },
+    description: "Omniport smart router for the best available Sonnet node",
+    id: "auto/claude-sonnet",
+    name: "Auto Claude Sonnet",
+    provider: "anthropic",
+  },
+  {
+    capabilities: { reasoning: true, tools: true, vision: true },
+    description: "Omniport smart router for the best available Opus node",
+    id: "auto/claude-opus",
+    name: "Auto Claude Opus",
+    provider: "anthropic",
+  },
+  {
+    capabilities: { reasoning: false, tools: true, vision: true },
+    description: "Omniport smart router for the fastest available Haiku node",
+    id: "auto/claude-haiku",
+    name: "Auto Claude Haiku",
+    provider: "anthropic",
+  },
   {
     capabilities: { reasoning: false, tools: true, vision: true },
     description: "Fast, highly capable model with tool use",
