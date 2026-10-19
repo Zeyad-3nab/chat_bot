@@ -24,7 +24,6 @@ import type { VisibilityType } from "@/components/chat/visibility-selector";
 import { useAutoResume } from "@/hooks/use-auto-resume";
 import { DEFAULT_CHAT_MODEL } from "@/lib/ai/models";
 import type { Vote } from "@/lib/db/schema";
-import { ChatbotError } from "@/lib/errors";
 import type { ChatMessage } from "@/lib/types";
 import { fetcher, fetchWithErrorHandlers, generateUUID } from "@/lib/utils";
 
@@ -118,16 +117,48 @@ export function ActiveChatProvider({ children }: { children: ReactNode }) {
       setDataStream((ds) => (ds ? [...ds, dataPart] : []));
     },
     onError: (error) => {
-      if (error.message?.includes("AI Gateway requires a valid credit card")) {
+      let errorDescription = error.message;
+      if (!errorDescription || errorDescription === "An error occurred.") {
+        errorDescription =
+          "Rate limit reached (429 Quota) or model unavailable. Please try again in a few moments.";
+      }
+
+      if (
+        errorDescription.includes("AI Gateway requires a valid credit card")
+      ) {
         setShowCreditCardAlert(true);
-      } else if (error instanceof ChatbotError) {
-        toast({ description: error.message, type: "error" });
       } else {
         toast({
-          description: error.message || "Oops, an error occurred!",
+          description: errorDescription,
           type: "error",
         });
       }
+
+      setMessages((prev) => {
+        const last = prev.at(-1);
+        if (
+          last?.role === "assistant" &&
+          last.parts?.some(
+            (p) => p.type === "text" && p.text?.includes(errorDescription)
+          )
+        ) {
+          return prev;
+        }
+
+        return [
+          ...prev,
+          {
+            id: generateUUID(),
+            parts: [
+              {
+                text: `⚠️ **Error:** ${errorDescription}`,
+                type: "text",
+              },
+            ],
+            role: "assistant",
+          },
+        ];
+      });
     },
     onFinish: () => {
       mutate(unstable_serialize(getChatHistoryPaginationKey));

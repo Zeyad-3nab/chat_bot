@@ -389,15 +389,71 @@ export async function POST(request: Request) {
         }
       },
       onError: (error) => {
+        console.error("Chat generation error:", error);
+
+        const err = error as {
+          message?: string;
+          cause?: unknown;
+          responseBody?: string;
+          statusCode?: number;
+        };
+
+        // Extract the deepest/most descriptive error message available
+        let msg = "";
+        if (err?.cause instanceof Error && err.cause.message) {
+          msg = err.cause.message;
+        } else if (typeof err?.cause === "string") {
+          msg = err.cause;
+        } else if (
+          err?.cause &&
+          typeof err.cause === "object" &&
+          "message" in err.cause
+        ) {
+          msg = String((err.cause as { message: unknown }).message);
+        } else if (err?.responseBody) {
+          try {
+            const parsed = JSON.parse(err.responseBody);
+            msg = parsed.error?.message || parsed.message || err.responseBody;
+          } catch {
+            msg = err.responseBody;
+          }
+        } else if (err?.message && err.message !== "An error occurred.") {
+          msg = err.message;
+        }
+
+        // Detect 429 / Quota limits specifically
+        const errorString = `${msg} ${err?.message || ""} ${JSON.stringify(error || {})}`;
         if (
-          error instanceof Error &&
-          error.message?.includes(
+          (err?.statusCode === 429 ||
+            errorString.includes("429") ||
+            errorString.toLowerCase().includes("rate limit") ||
+            errorString.toLowerCase().includes("quota")) &&
+          (!msg || msg === "An error occurred.")
+        ) {
+          msg =
+            "Rate limit exceeded (429 Quota). Your Claude / Omniport provider has reached its usage limit for this window. Please wait a bit and try again.";
+        }
+
+        if (!msg) {
+          msg = err?.message || "Oops, an error occurred!";
+        }
+
+        if (
+          msg.includes(
             "AI Gateway requires a valid credit card on file to service requests"
           )
         ) {
           return "AI Gateway requires a valid credit card on file to service requests. Please visit https://vercel.com/d?to=%2F%5Bteam%5D%2F%7E%2Fai%3Fmodal%3Dadd-credit-card to add a card and unlock your free credits.";
         }
-        return "Oops, an error occurred!";
+
+        if (msg.includes("Last error: ")) {
+          msg = msg.split("Last error: ").pop() || msg;
+        }
+        if (msg.startsWith("AI_APICallError: ")) {
+          msg = msg.replace("AI_APICallError: ", "");
+        }
+
+        return msg.trim() || "Oops, an error occurred!";
       },
       originalMessages: isToolApprovalFlow ? uiMessages : undefined,
     });
