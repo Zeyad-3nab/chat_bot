@@ -49,6 +49,50 @@ export const chatModels: ChatModel[] = [
   },
   {
     capabilities: { reasoning: true, tools: true, vision: true },
+    description: "Latest flagship Claude Opus reasoning model via Claude Code",
+    id: "cc/claude-opus-5-5",
+    name: "Claude Opus 5.5 (Claude Code)",
+    provider: "claude-code",
+    reasoningEffort: "medium",
+  },
+  {
+    capabilities: { reasoning: true, tools: true, vision: true },
+    description:
+      "Claude Opus 5 deep reasoning and complex analysis via Claude Code",
+    id: "cc/claude-opus-5",
+    name: "Claude Opus 5 (Claude Code)",
+    provider: "claude-code",
+    reasoningEffort: "medium",
+  },
+  {
+    capabilities: { reasoning: true, tools: true, vision: true },
+    description:
+      "Claude Sonnet 5.5 high-intelligence hybrid reasoning via Claude Code",
+    id: "cc/claude-sonnet-5-5",
+    name: "Claude Sonnet 5.5 (Claude Code)",
+    provider: "claude-code",
+    reasoningEffort: "medium",
+  },
+  {
+    capabilities: { reasoning: true, tools: true, vision: true },
+    description:
+      "Claude Fable 5.1 fast, efficient model with reasoning via Claude Code",
+    id: "cc/claude-fable-5-1",
+    name: "Claude Fable 5.1 (Claude Code)",
+    provider: "claude-code",
+    reasoningEffort: "medium",
+  },
+  {
+    capabilities: { reasoning: true, tools: true, vision: true },
+    description:
+      "Claude Fable 5 fast, lightweight model with reasoning via Claude Code",
+    id: "cc/claude-fable-5",
+    name: "Claude Fable 5 (Claude Code)",
+    provider: "claude-code",
+    reasoningEffort: "medium",
+  },
+  {
+    capabilities: { reasoning: true, tools: true, vision: true },
     description: "Flagship hybrid reasoning and coding model via Claude Code",
     id: "cc/claude-sonnet-5",
     name: "Claude Sonnet 5 (Claude Code)",
@@ -65,12 +109,13 @@ export const chatModels: ChatModel[] = [
     reasoningEffort: "medium",
   },
   {
-    capabilities: { reasoning: false, tools: true, vision: true },
+    capabilities: { reasoning: true, tools: true, vision: true },
     description:
       "State-of-the-art coding and complex tasks model via Claude Code",
     id: "cc/claude-sonnet-4-5-20250929",
-    name: "Claude 3.5 Sonnet (Claude Code)",
+    name: "Claude Sonnet 4.5 (Claude Code)",
     provider: "claude-code",
+    reasoningEffort: "medium",
   },
   {
     capabilities: { reasoning: true, tools: true, vision: true },
@@ -81,11 +126,37 @@ export const chatModels: ChatModel[] = [
     reasoningEffort: "medium",
   },
   {
+    capabilities: { reasoning: true, tools: true, vision: true },
+    description:
+      "Claude Opus 4.7 adaptive reasoning and analysis via Claude Code",
+    id: "cc/claude-opus-4-7",
+    name: "Claude Opus 4.7 (Claude Code)",
+    provider: "claude-code",
+    reasoningEffort: "medium",
+  },
+  {
+    capabilities: { reasoning: true, tools: true, vision: true },
+    description:
+      "Claude Opus 4.6 reasoning and complex analysis via Claude Code",
+    id: "cc/claude-opus-4-6",
+    name: "Claude Opus 4.6 (Claude Code)",
+    provider: "claude-code",
+    reasoningEffort: "medium",
+  },
+  {
+    capabilities: { reasoning: true, tools: true, vision: true },
+    description: "Claude Opus 4.5 reasoning and analysis via Claude Code",
+    id: "cc/claude-opus-4-5-20251101",
+    name: "Claude Opus 4.5 (Claude Code)",
+    provider: "claude-code",
+    reasoningEffort: "medium",
+  },
+  {
     capabilities: { reasoning: false, tools: true, vision: true },
     description:
       "Ultra-fast intelligence model for rapid coding & chat via Claude Code",
     id: "cc/claude-haiku-4-5-20251001",
-    name: "Claude 3.5 Haiku (Claude Code)",
+    name: "Claude Haiku 4.5 (Claude Code)",
     provider: "claude-code",
   },
   {
